@@ -110,10 +110,10 @@ Project Purpose:
 			}
 		}
 
-		if (isBetween(playerColArray.y2, masterColArray[counter].y1, masterColArray[counter].y2) &&
-		playerColArray.x2 == (masterColArray[counter].x1 - 2) ||
-		isBetween(masterColArray[counter].y1, playerColArray.y1, playerColArray.y2) &&
-		playerColArray.x2 == (masterColArray[counter].x1 - 2)){
+		if ((isBetween(playerColArray.y2, masterColArray[counter].y1, masterColArray[counter].y2) &&
+		isInRange(playerColArray.x2, (masterColArray[counter].x1 - 1), (masterColArray[counter].x1 + 1)))||
+		(isBetween(masterColArray[counter].y1, playerColArray.y1, playerColArray.y2) &&
+		isInRange(playerColArray.x2, (masterColArray[counter].x1 - 1), (masterColArray[counter].x1 + 1)))){
 			eastSignal = true
 			console.log("East")
 			if (xSpeed > 0){
