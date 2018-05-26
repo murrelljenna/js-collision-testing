@@ -48,6 +48,58 @@ Project Purpose:
 			return false
 		}
 	}
+	
+	function range(startAt, size) {
+	    return [...Array(size).keys()].map(i => i + startAt);
+	}
+
+	function playerDirection(x, y){
+
+		if (y < yPosControl){
+			playerDirectionNorth = true;
+			playerDirectionSouth = false;
+		} else if (y >= yPosControl){
+			playerDirectionSouth = true;
+			playerDirectionNorth = false;
+		}
+
+		if (x < xPosControl){
+			playerDirectionWest = true;
+			playerDirectionEast = false;
+		}else if (x >= xPosControl){
+			playerDirectionEast = true;
+			playerDirectionWest = false;
+		}
+
+	}	
+
+/*
+
+	function findPath(){
+		
+		pathFound = false
+		let counter = 0		
+		let pathQueue = []
+		let neighbourTile = []
+		let pathQueuePriority = {}
+		
+		pathQueue[counter] = {}	
+		pathQueue[counter].x = mobX
+		pathQueue[counter].y = mobY
+
+		while (pathQueue.length > 0) {
+	 		
+			
+			neighbourTile = (pathQueue[0])			
+									
+
+			pathFound = true;	
+						
+			counter += 1	
+		}					
+	}
+
+*/
 
 	function refreshFrame(){
 	
@@ -126,7 +178,7 @@ Project Purpose:
 	collisionDirectionSouth = southSignal;
 	collisionDirectionEast = eastSignal;
 	collisionDirectionWest = westSignal;
-
+		
 	requestAnimationFrame(refreshFrame);
 	
 	
@@ -259,10 +311,28 @@ Project Purpose:
 
 	ctx2.fillRect(xPosControl, yPosControl, 15, 15);
 	
-	var collisionDirectionNorth = false
-	var collisionDirectionSouth = false
-	var collisionDirectionEast = false
-	var collisionDirectionWest = false
+	var collisionDirectionNorth = false;
+	var collisionDirectionSouth = false;
+	var collisionDirectionEast = false;
+	var collisionDirectionWest = false;
+
+
+	// Monster starting placement
+
+	
+	var mobY = 200;
+	var mobX = 200;
+
+	ctx.fillStyle="#FF0000";
+	ctx.fillRect(mobY, mobX, 25, 25);	
+	
+	var mobContact = false;
+	var pathFound = false;
+
+	var playerDirectionNorth = false;
+	var playerDirectionSouth = false;
+	var playerDirectionEast = false;
+	var palyerDirectionWest = false;
 
 	// WASD keys event listener
 
