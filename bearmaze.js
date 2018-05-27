@@ -1,11 +1,3 @@
-function isBetween(needle, start, end){
-if (needle >= start && needle <= end){
-	return true
-}else{
-	return false
-}
-}
-
 function pickRange(start, end){
 	return Math.floor(Math.random() * ((end - start + 1)) + start)
 }
@@ -51,6 +43,8 @@ function findPath(){
 	let pathQueue = []
 	let neighbourTile = []
 	let pathQueuePriority = {}
+	let movementCost
+	let totalMovementCost
 	
 	pathQueue[counter] = {}	
 	pathQueue[counter].x = mobX
@@ -69,6 +63,108 @@ function findPath(){
 }
 
 */
+
+// Collision detection functions
+
+function detectCollision(){
+	for (var counter in masterColArray){
+		if (
+		masterColArray[counter].x2 < playerColArray.x1 ||  
+		playerColArray.x2 < masterColArray[counter].x1 ||
+		masterColArray[counter].y2 < playerColArray.y1 ||
+		playerColArray.y2 < masterColArray[counter].y1
+		){
+			return false
+		}else{	
+			return true
+		}
+	}
+}
+
+function collisionDetectDebug(counter){
+	if (!(masterColArray[counter].x2 <= playerColArray.x1)){
+		console.log (counter + " [1]masterColArray[counter].x2 <= playerColArray.x1 = false")
+	}  
+	if (!(playerColArray.x2 <= masterColArray[counter].x1)){
+		console.log (counter + " [2] playerColArray.x2 <= masterColArray[counter].x1 = false")
+	}
+	if (!(masterColArray[counter].y2 <= playerColArray.y1)){
+		console.log (counter + " [3] masterColArray[counter].y2 <= playerColArray.y1 = false")
+	}
+	if (!(playerColArray.y2 <= masterColArray[counter].y1)){
+		console.log (counter + " [4] playerColArray.y2 <= masterColArray[counter].y1 = false")
+	}
+}
+
+function detectCollisionSide(){
+
+	let northSignal = false
+	let southSignal = false
+	let eastSignal = false
+	let westSignal = false
+
+	for (var counter in masterColArray){
+		
+		if ((isInRange(playerColArray.x1, masterColArray[counter].x1, masterColArray[counter].x2) &&
+		isInRange(playerColArray.y1, (masterColArray[counter].y2 - 1), (masterColArray[counter].y2 + 1))) || 
+		(isInRange(masterColArray[counter].x2, playerColArray.x1, playerColArray.x2) &&
+		isInRange(playerColArray.y1, (masterColArray[counter].y2 - 1), (masterColArray[counter].y2 + 1)))){
+			northSignal = true
+			if (ySpeed < 0 ){
+				ySpeed = 0
+			}
+		}
+
+		if ((isInRange(playerColArray.x2, masterColArray[counter].x1, masterColArray[counter].x2) &&
+		isInRange(playerColArray.y2, (masterColArray[counter].y1 - 1), (masterColArray[counter].y1 + 1))) ||
+		(isInRange(masterColArray[counter].x1, playerColArray.x1, playerColArray.x2) &&
+		isInRange(playerColArray.y2, (masterColArray[counter].y1 - 1), (masterColArray[counter].y1 + 1)))){
+			southSignal = true
+			if (ySpeed > 0){
+				ySpeed = 0
+			}
+		}
+
+		if ((isInRange(playerColArray.y1, masterColArray[counter].y1, masterColArray[counter].y2) &&
+		isInRange(playerColArray.x1, (masterColArray[counter].x2 - 1), (masterColArray[counter].x2 + 1))) ||
+		(isInRange(masterColArray[counter].y2, playerColArray.y1, playerColArray.y2) &&
+		isInRange(playerColArray.x1, (masterColArray[counter].x2 - 1), (masterColArray[counter].x2 + 1)))){
+			westSignal = true
+			if (xSpeed < 0){
+				xSpeed = 0
+			}
+		}
+
+		if ((isInRange(playerColArray.y2, masterColArray[counter].y1, masterColArray[counter].y2) &&
+		isInRange(playerColArray.x2, (masterColArray[counter].x1 - 1), (masterColArray[counter].x1 + 1)))||
+		(isInRange(masterColArray[counter].y1, playerColArray.y1, playerColArray.y2) &&
+		isInRange(playerColArray.x2, (masterColArray[counter].x1 - 1), (masterColArray[counter].x1 + 1)))){
+			eastSignal = true
+			if (xSpeed > 0){
+				xSpeed = 0
+			}
+		}
+	}
+
+collisionDirectionNorth = northSignal;
+collisionDirectionSouth = southSignal;
+collisionDirectionEast = eastSignal;
+collisionDirectionWest = westSignal;
+	
+}
+
+function masterColArrayDebug(){
+	
+	ctx.strokeStyle="#FF0000";
+	for (index in masterColArray){
+		ctx.moveTo((masterColArray[index].x1), (masterColArray[index].y1))
+		ctx.lineTo((masterColArray[index].x2), (masterColArray[index].y2))
+		ctx.stroke()
+	}
+
+}
+
+// Refresh frame function (carries most other functions)
 
 function refreshFrame(){
 
@@ -89,103 +185,15 @@ playerColArray.y1 = yPosControl;
 playerColArray.x2 = xPosControl2;
 playerColArray.y2 = yPosControl2;
 
-// Runs first collision detection round
+detectCollisionSide();
 
-let northSignal = false
-let southSignal = false
-let eastSignal = false
-let westSignal = false
-
-for (var counter in masterColArray){
-	
-	if ((isBetween(playerColArray.x1, masterColArray[counter].x1, masterColArray[counter].x2) &&
-	isInRange(playerColArray.y1, (masterColArray[counter].y2 - 1), (masterColArray[counter].y2 + 1))) || 
-	(isBetween(masterColArray[counter].x2, playerColArray.x1, playerColArray.x2) &&
-	isInRange(playerColArray.y1, (masterColArray[counter].y2 - 1), (masterColArray[counter].y2 + 1)))){
-		northSignal = true
-		console.log("North")
-		if (ySpeed < 0 ){
-			ySpeed = 0
-		}
-	}
-
-	if ((isBetween(playerColArray.x2, masterColArray[counter].x1, masterColArray[counter].x2) &&
-	isInRange(playerColArray.y2, (masterColArray[counter].y1 - 1), (masterColArray[counter].y1 + 1))) ||
-	(isBetween(masterColArray[counter].x1, playerColArray.x1, playerColArray.x2) &&
-	isInRange(playerColArray.y2, (masterColArray[counter].y1 - 1), (masterColArray[counter].y1 + 1)))){
-		southSignal = true
-		console.log("South")
-		if (ySpeed > 0){
-			ySpeed = 0
-		}
-	}
-
-	if ((isBetween(playerColArray.y1, masterColArray[counter].y1, masterColArray[counter].y2) &&
-	isInRange(playerColArray.x1, (masterColArray[counter].x2 - 1), (masterColArray[counter].x2 + 1))) ||
-	(isBetween(masterColArray[counter].y2, playerColArray.y1, playerColArray.y2) &&
-	isInRange(playerColArray.x1, (masterColArray[counter].x2 - 1), (masterColArray[counter].x2 + 1)))){
-		westSignal = true
-		console.log("west")
-		if (xSpeed < 0){
-			xSpeed = 0
-		}
-	}
-
-	if ((isBetween(playerColArray.y2, masterColArray[counter].y1, masterColArray[counter].y2) &&
-	isInRange(playerColArray.x2, (masterColArray[counter].x1 - 1), (masterColArray[counter].x1 + 1)))||
-	(isBetween(masterColArray[counter].y1, playerColArray.y1, playerColArray.y2) &&
-	isInRange(playerColArray.x2, (masterColArray[counter].x1 - 1), (masterColArray[counter].x1 + 1)))){
-		eastSignal = true
-		console.log("East")
-		if (xSpeed > 0){
-			xSpeed = 0
-		}
-	}
-}
-
-collisionDirectionNorth = northSignal;
-collisionDirectionSouth = southSignal;
-collisionDirectionEast = eastSignal;
-collisionDirectionWest = westSignal;
-	
 requestAnimationFrame(refreshFrame);
 
 
 }
 
-// Collision detection listener
 
-function collisionDetect(counter){
-	if (
-	masterColArray[counter].x2 < playerColArray.x1 ||  
-	playerColArray.x2 < masterColArray[counter].x1 ||
-	masterColArray[counter].y2 < playerColArray.y1 ||
-	playerColArray.y2 < masterColArray[counter].y1
-	){
-		return false
-	}else{	
-		return true
-	}
-}
-
-// Debug function - pressing "X" performs collision check and prints off the boolean result of each condition.
-
-function collisionDetectDebug(counter){
-	if (!(masterColArray[counter].x2 <= playerColArray.x1)){
-		console.log (counter + " [1]masterColArray[counter].x2 <= playerColArray.x1 = false")
-	}  
-	if (!(playerColArray.x2 <= masterColArray[counter].x1)){
-		console.log (counter + " [2] playerColArray.x2 <= masterColArray[counter].x1 = false")
-	}
-	if (!(masterColArray[counter].y2 <= playerColArray.y1)){
-		console.log (counter + " [3] masterColArray[counter].y2 <= playerColArray.y1 = false")
-	}
-	if (!(playerColArray.y2 <= masterColArray[counter].y1)){
-		console.log (counter + " [4] playerColArray.y2 <= masterColArray[counter].y1 = false")
-	}
-}
 // Canvas Setup
-
 
 var canvas = document.getElementById("layerOne");
 var ctx = canvas.getContext("2d");
@@ -209,34 +217,17 @@ var masterColArray = [];
 
 // Canvas Drawing & Collision Loop
 
-
 for (counter = 0; counter < 7;){
-
-
-	// Path Start Value Declarations
-
 
 	xCoord = pickRange(0, canvasWidth);
 	yCoord = pickRange(0, canvasHeight);
 
-
-	// Begin Line Drawing  Using Math.random() Value Declarations
-
-
 	ctx.beginPath();
 	ctx.moveTo(xCoord, yCoord);
-	while (pickRange(0, 1) === 0){
-
-
-		// Starting Coordinate Capture (for collision array)
-		
+	while (pickRange(0, 1) === 0){	
 
 		x1 = xCoord;
-		y1 = yCoord;			
-
-		
-		// Line Drawing Loop
-
+		y1 = yCoord;
 
 		coinFlip = Math.floor(Math.random() * 2);
 		if (coinFlip === 0){
@@ -268,9 +259,7 @@ for (counter = 0; counter < 7;){
 
 var lineCount = masterColArray.length;
 
-
 // Player starting placement
-
 
 var yPosControl = 403;
 var xPosControl = 403;
@@ -285,9 +274,7 @@ var collisionDirectionSouth = false;
 var collisionDirectionEast = false;
 var collisionDirectionWest = false;
 
-
 // Monster starting placement
-
 
 var mobY = 200;
 var mobX = 200;
@@ -305,7 +292,6 @@ var palyerDirectionWest = false;
 
 // WASD keys event listener
 
-
 document.addEventListener("keydown", function(event) {
 	if ((event.code == 'KeyW') && (collisionDirectionNorth != true))  {
 		ySpeed = -2;
@@ -320,6 +306,9 @@ document.addEventListener("keydown", function(event) {
 		for (var counter in masterColArray){
 			collisionDetectDebug(counter);
 		}
+
+	} else if (event.code == 'KeyC'){
+		masterColArrayDebug();
 	} 
 })
 
@@ -337,16 +326,6 @@ document.addEventListener("keyup", function(event) {
 }
 )
 
-// Collision detection tracer (draws red lines along collision paths for testing - disabled by default)
-
-/*	
-ctx.strokeStyle="#FF0000";
-for (index in masterColArray){
-	ctx.moveTo((masterColArray[index].x1), (masterColArray[index].y1))
-	ctx.lineTo((masterColArray[index].x2), (masterColArray[index].y2))
-	ctx.stroke()
-}
-*/
 
 refreshFrame();
 
