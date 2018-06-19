@@ -1,19 +1,76 @@
 
 function pickRange(start, end){
+
 	return Math.floor(Math.random() * ((end - start + 1)) + start)
+
 }
 
 function isInRange(needle, min, max){
+
 	if ((needle >= min) && (needle <= max)){
+	
 		return true
+	
 	}else{
+	
 		return false
+	
 	}
+
 }
 
 function range(startAt, size) {
-    return [...Array(size).keys()].map(i => i + startAt);
+
+	return [...Array(size).keys()].map(i => i + startAt);
+
 }
+
+/*
+
+	Object Constructor Functions
+
+*/
+
+function MapEntity(x1, y1, width, height){
+	
+	this.x1 = x1
+	this.y1 = y1
+	this.width = width
+	this.height = height
+
+}
+
+function Player(x1, y1, width, height){
+	
+	this.x1 = x1
+	this.y1 = y1
+	this.width = width
+	this.height = height
+	this.xSpeed = 0
+	this.ySpeed = 0
+	this.collisionNorth = false
+	this.collisionSouth = false
+	this.collisionEast = false
+	this.collisionWest = false
+
+}
+
+function Monster(x1, y1, width, height){
+	
+	this.x1 = x1
+	this.y1 = y1
+	this.width = width
+	this.height = height
+	this.xSpeed = 0
+	this.ySpeed = 0
+	this.collisionNorth = false
+	this.collisionSouth = false
+	this.collisionEast = false
+	this.collisionWest = false
+
+}
+
+
 
 // Pathfinding functions.
 
@@ -37,9 +94,6 @@ function playerDirection(x, y){
 
 }	
 
-function getPlayerLocation(){
-	return {"x" : playerPosX, "y" : playerPosY}
-}
 function obstacleCheck(x, y){
 	for (var counter in masterColArray){
 		if (
@@ -54,75 +108,7 @@ function obstacleCheck(x, y){
 		}
 	}
 }
-/*
-function findPath(){
-	
-	pathFound = false
-	let counter = 0		
-	let closedQueue = []
-	let openQueue = []
-	let queuePriority = {}
-	let cameFrom = []
-	let target = getPlayerLocation()	
 
-	let movementCost
-	let totalMovementCost
-		
-	let neighbourTileNorth = {}
-	let neighbourTileSouth = {}
-	let neighbourTileEast = {}
-	let neighbourTileWest = {}					
-
-	closedQueue[counter] = {}	
-	closedQueue[counter].x = mobX
-	closedQueue[counter].y = mobY
-
-	while (closedQueue.length < 100) {
-		
-		openQueue = []
-		
-		neighbourTileNorth = {}
-		neighbourTileNorth.x = (closedQueue[counter].x)
-		neighbourTileNorth.y = (closedQueue[counter].y - 1)
-	
-		console.log("blah")
-
-		neighbourTileSouth = {}
-		neighbourTileSouth.x = (closedQueue[counter].x)
-		neighbourTileSouth.y = (closedQueue[counter].y + 1)
-		
-		neighbourtileEast = {}
-		neighbourTileEast.x = (closedQueue[counter].x + 1)
-		neighbourTileEast.y = (closedQueue[counter].y)
-
-		neighbourtileWest = {}
-		neighbourTileWest.x = (closedQueue[counter].x - 1)		
-		neighbourTileWest.y = (closedQueue[counter].y)
-		
-		openQueue.push(neighbourTileNorth);
-		openQueue.push(neighbourTileSouth);
-		openQueue.push(neighbourTileEast);
-		openQueue.push(neighbourTileWest);
-
-		for (var index in openQueue){
-			if (openQueue[index].x == target.x && openQueue[index].y == target.y){
-				console.log("WINRAR")
-				break;
-			}
-			if (obstacleCheck(openQueue[index].x, openQueue[index].y) !== true){
-
-				console.log(closedQueue)
-				closedQueue.push(openQueue[index])
-			}	
-		}
-
-		pathFound = true;	
-					
-		counter += 1	
-	}					
-}
-
-*/
 
 function roombaMovement(movingEntity){
 
