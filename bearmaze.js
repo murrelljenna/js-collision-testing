@@ -45,9 +45,10 @@ var masterColArray = [];
 
 // Canvas Drawing & Collision Loop
 
-var lineCount = masterColArray.length;
-drawLines()
+var mapEntities = [];
 
+randomLines(14, mapEntities);
+drawMap(ctx, mapEntities)
 
 // Player starting placement
 
