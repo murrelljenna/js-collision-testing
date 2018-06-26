@@ -1,4 +1,8 @@
 
+/*
+	General Functions
+*/
+
 function pickRange (start, end) {
 	return Math.floor(Math.random() * ((end - start + 1)) + start)
 }
@@ -16,19 +20,22 @@ function range (startAt, size) {
 }
 
 /*
-
 	Object Constructor Functions
-
 */
 
-function MapEntity (x1, y1, width, height) {
+function MapEntity (x1, y1, width, height, arr) {
 	this.x1 = x1
 	this.y1 = y1
 	this.width = width
 	this.height = height
+	arr = arr || 0	
+
+	if (arr !== 0) {
+		arr.push(this)
+	}
 }
 
-function Player (x1, y1, width, height) {
+function Player (x1, y1, width, height, arr) {
 	this.x1 = x1
 	this.y1 = y1
 	this.width = width
@@ -39,9 +46,14 @@ function Player (x1, y1, width, height) {
 	this.collisionSouth = false
 	this.collisionEast = false
 	this.collisionWest = false
+	arr = arr || 0
+
+	if (arr !== 0) {
+		arr.push(this)
+	}
 }
 
-function Monster (x1, y1, width, height) {
+function Monster (x1, y1, width, height, arr) {
 	this.x1 = x1
 	this.y1 = y1
 	this.width = width
@@ -52,12 +64,15 @@ function Monster (x1, y1, width, height) {
 	this.collisionSouth = false
 	this.collisionEast = false
 	this.collisionWest = false
+	arr = arr || 0
+
+	if (arr !== 0) {
+		arr.push(this)
+	}
 }
 
 /*
-
-Pathfinding functions.
-
+	Pathfinding functions.
 */
 
 function roombaMovement(movingEntity){
@@ -84,7 +99,6 @@ function roombaMovement(movingEntity){
 		}else{
 			movingEntity.ySpeed = 2
 		}
-
 	}
 	if (movingEntity.collisionDirectionEast === true && movingEntity.collisionDirectionNorth === false && movingEntity.collisionDirectionSouth === false){
 		coinFlip = Math.floor(Math.random() * 2);
@@ -188,10 +202,10 @@ function detectCollisionSide(needleColArray){
 		}
 	}
 
-needleColArray.collisionDirectionNorth = northSignal;
-needleColArray.collisionDirectionSouth = southSignal;
-needleColArray.collisionDirectionEast = eastSignal;
-needleColArray.collisionDirectionWest = westSignal;
+	needleColArray.collisionDirectionNorth = northSignal;
+	needleColArray.collisionDirectionSouth = southSignal;
+	needleColArray.collisionDirectionEast = eastSignal;
+	needleColArray.collisionDirectionWest = westSignal;
 }
 
 function masterColArrayDebug(){
@@ -220,13 +234,42 @@ function updatePosition(movingEntity){
 }
 
 /*
-
 	Map Object Generation
-
 */
 
+function randomLines(count, arr){
+	for (counter = 0; counter < count;){
+		x1 = pickRange(0, canvasWidth);
+		y1 = pickRange(0, canvasHeight);
+		
+		coinFlip = Math.floor(Math.random() * 2);
+		if (coinFlip === 0){
+			width = pickRange(0, canvasWidth);
+			height = 1;		
+		}				
+		else if (coinFlip === 1){
+			width = 1;
+			height = pickRange(0, canvasHeight);
+		}
+		
+		new MapEntity (x1, y1, width, height, arr);	
+		counter += 1
+	}
 
+	return arr
+}
 // Canvas Drawing Functions
+
+function drawMap(canvas, arr){
+	for (index in arr){
+		x1 = arr[index].x1;
+		y1 = arr[index].y1;
+		width = arr[index].width;
+		height = arr[index].height;
+
+		canvas.fillRect(x1, y1, width, height);
+	} 
+}
 
 function drawLines(){
 	for (counter = 0; counter < 14;){
