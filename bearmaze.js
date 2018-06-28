@@ -6,8 +6,8 @@ function refreshFrame(){
 updatePosition(playerObj);
 updatePosition(monsterObj);
 
-detectCollisionSide(playerObj);
-detectCollisionSide(monsterObj);
+detectCollisionSide(playerObj, mapEntities);
+detectCollisionSide(monsterObj, mapEntities);
 
 if (outsideCanvas(playerObj)){
 	drawLines()
@@ -52,18 +52,9 @@ drawMap(ctx, mapEntities)
 
 // Player starting placement
 
-var playerObj = {
-	"x1" : 403, 
-	"y1" : 403, 
-	"width" : 15, 
-	"height" : 15, 
-	"xSpeed" : 0, 
-	"ySpeed" : 0,
-	"collisionDirectionNorth" : false,
-	"collisionDirectionSouth" : false,
-	"collisionDirectionEast" : false,
-	"collisionDirectionWest" : false
-};
+var playerEntities = []
+var playerObj = new Player (403, 403, 15, 15, playerEntities) 
+
 
 ctx2.fillRect(playerObj.x1, playerObj.y1, playerObj.width, playerObj.height);
 

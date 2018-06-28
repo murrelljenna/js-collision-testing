@@ -28,6 +28,8 @@ function MapEntity (x1, y1, width, height, arr) {
 	this.y1 = y1
 	this.width = width
 	this.height = height
+	this.x2 = x1 + width
+	this.y2 = y1 + height
 	arr = arr || 0	
 
 	if (arr !== 0) {
@@ -157,55 +159,55 @@ function collisionDetectDebug(counter){
 	}
 }
 
-function detectCollisionSide(needleColArray){
+function detectCollisionSide(needleArr, haystackArr){
 	let northSignal = false
 	let southSignal = false
 	let eastSignal = false
 	let westSignal = false
 
-	for (var counter in masterColArray){
-		if ((isInRange(needleColArray.x1, masterColArray[counter].x1, masterColArray[counter].x2) &&
-		isInRange(needleColArray.y1, (masterColArray[counter].y2 - 1), (masterColArray[counter].y2 + 1))) || 
-		(isInRange(masterColArray[counter].x2, needleColArray.x1, needleColArray.x2) &&
-		isInRange(needleColArray.y1, (masterColArray[counter].y2 - 1), (masterColArray[counter].y2 + 1)))){
+	for (var counter in haystackArr){
+		if ((isInRange(needleArr.x1, haystackArr[counter].x1, haystackArr[counter].x2) &&
+		isInRange(needleArr.y1, (haystackArr[counter].y2 - 1), (haystackArr[counter].y2 + 1))) || 
+		(isInRange(haystackArr[counter].x2, needleArr.x1, needleArr.x2) &&
+		isInRange(needleArr.y1, (haystackArr[counter].y2 - 1), (haystackArr[counter].y2 + 1)))){
 			northSignal = true
-			if (needleColArray.ySpeed < 0 ){
-				needleColArray.ySpeed = 0
+			if (needleArr.ySpeed < 0 ){
+				needleArr.ySpeed = 0
 			}
 		}
-		if ((isInRange(needleColArray.x2, masterColArray[counter].x1, masterColArray[counter].x2) &&
-		isInRange(needleColArray.y2, (masterColArray[counter].y1 - 1), (masterColArray[counter].y1 + 1))) ||
-		(isInRange(masterColArray[counter].x1, needleColArray.x1, needleColArray.x2) &&
-		isInRange(needleColArray.y2, (masterColArray[counter].y1 - 1), (masterColArray[counter].y1 + 1)))){
+		if ((isInRange(needleArr.x2, haystackArr[counter].x1, haystackArr[counter].x2) &&
+		isInRange(needleArr.y2, (haystackArr[counter].y1 - 1), (haystackArr[counter].y1 + 1))) ||
+		(isInRange(haystackArr[counter].x1, needleArr.x1, needleArr.x2) &&
+		isInRange(needleArr.y2, (haystackArr[counter].y1 - 1), (haystackArr[counter].y1 + 1)))){
 			southSignal = true
-			if (needleColArray.ySpeed > 0){
-				needleColArray.ySpeed = 0
+			if (needleArr.ySpeed > 0){
+				needleArr.ySpeed = 0
 			}
 		}
-		if ((isInRange(needleColArray.y1, masterColArray[counter].y1, masterColArray[counter].y2) &&
-		isInRange(needleColArray.x1, (masterColArray[counter].x2 - 1), (masterColArray[counter].x2 + 1))) ||
-		(isInRange(masterColArray[counter].y2, needleColArray.y1, needleColArray.y2) &&
-		isInRange(needleColArray.x1, (masterColArray[counter].x2 - 1), (masterColArray[counter].x2 + 1)))){
+		if ((isInRange(needleArr.y1, haystackArr[counter].y1, haystackArr[counter].y2) &&
+		isInRange(needleArr.x1, (haystackArr[counter].x2 - 1), (haystackArr[counter].x2 + 1))) ||
+		(isInRange(haystackArr[counter].y2, needleArr.y1, needleArr.y2) &&
+		isInRange(needleArr.x1, (haystackArr[counter].x2 - 1), (haystackArr[counter].x2 + 1)))){
 			westSignal = true
-			if (needleColArray.xSpeed < 0){
-				needleColArray.xSpeed = 0
+			if (needleArr.xSpeed < 0){
+				needleArr.xSpeed = 0
 			}
 		}
-		if ((isInRange(needleColArray.y2, masterColArray[counter].y1, masterColArray[counter].y2) &&
-		isInRange(needleColArray.x2, (masterColArray[counter].x1 - 1), (masterColArray[counter].x1 + 1)))||
-		(isInRange(masterColArray[counter].y1, needleColArray.y1, needleColArray.y2) &&
-		isInRange(needleColArray.x2, (masterColArray[counter].x1 - 1), (masterColArray[counter].x1 + 1)))){
+		if ((isInRange(needleArr.y2, haystackArr[counter].y1, haystackArr[counter].y2) &&
+		isInRange(needleArr.x2, (haystackArr[counter].x1 - 1), (haystackArr[counter].x1 + 1)))||
+		(isInRange(haystackArr[counter].y1, needleArr.y1, needleArr.y2) &&
+		isInRange(needleArr.x2, (haystackArr[counter].x1 - 1), (haystackArr[counter].x1 + 1)))){
 			eastSignal = true
-			if (needleColArray.xSpeed > 0){
-				needleColArray.xSpeed = 0
+			if (needleArr.xSpeed > 0){
+				needleArr.xSpeed = 0
 			}
 		}
 	}
 
-	needleColArray.collisionDirectionNorth = northSignal;
-	needleColArray.collisionDirectionSouth = southSignal;
-	needleColArray.collisionDirectionEast = eastSignal;
-	needleColArray.collisionDirectionWest = westSignal;
+	needleArr.collisionDirectionNorth = northSignal;
+	needleArr.collisionDirectionSouth = southSignal;
+	needleArr.collisionDirectionEast = eastSignal;
+	needleArr.collisionDirectionWest = westSignal;
 }
 
 function masterColArrayDebug(){
@@ -258,6 +260,7 @@ function randomLines(count, arr){
 
 	return arr
 }
+
 // Canvas Drawing Functions
 
 function drawMap(canvas, arr){
@@ -269,46 +272,6 @@ function drawMap(canvas, arr){
 
 		canvas.fillRect(x1, y1, width, height);
 	} 
-}
-
-function drawLines(){
-	for (counter = 0; counter < 14;){
-		xCoord = pickRange(0, canvasWidth);
-		yCoord = pickRange(0, canvasHeight);
-
-		ctx.beginPath();
-		ctx.moveTo(xCoord, yCoord);
-		while (pickRange(0, 1) === 0){	
-			x1 = xCoord;
-			y1 = yCoord;
-
-			coinFlip = Math.floor(Math.random() * 2);
-			if (coinFlip === 0){
-				xCoord = pickRange(x1, canvasWidth);
-			}else{
-				yCoord = pickRange(y1, canvasHeight);
-			}
-			ctx.lineTo(xCoord, yCoord);
-			
-
-			// Ending coordinate capture (for collision array)
-
-			
-			x2 = xCoord
-			y2 = yCoord
-
-			masterColArray[counter] = {};;
-			masterColArray[counter].x1 = x1;
-			masterColArray[counter].y1 = y1;
-			masterColArray[counter].x2 = x2;
-			masterColArray[counter].y2 = y2;
-
-
-			counter++ 
-		}
-		ctx.stroke();
-	}
-
 }
 
 
