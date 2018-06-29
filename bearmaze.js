@@ -31,59 +31,17 @@ var canvasWidth = canvas.width;
 var canvas2 = document.getElementById("layerTwo");
 var ctx2 = canvas2.getContext("2d");
 
-// Canvas Drawing & Collision Loop Variable Declarations
-
-var compLineCounter = 0;
-var coinFlip;
-var xCoord;
-var yCoord;
-var x1
-var y1
-var x2
-var y2
-var masterColArray = [];
-
 // Canvas Drawing & Collision Loop
 
 var mapEntities = [];
+var playerEntities = [];
+var monsterEntities = [];
+
+var playerObj = new Player (403, 403, 15, 15, playerEntities);
+var monsterObj = new Monster (200, 200, 25, 25, monsterEntities);
 
 randomLines(14, mapEntities);
 drawMap(ctx, mapEntities)
-
-// Player starting placement
-
-var playerEntities = []
-var playerObj = new Player (403, 403, 15, 15, playerEntities) 
-
-
-ctx2.fillRect(playerObj.x1, playerObj.y1, playerObj.width, playerObj.height);
-
-
-// Monster starting placement
-
-var monsterObj = {
-	"x1" : 200, 
-	"y1" : 200, 
-	"width" : 25, 
-	"height" : 25, 
-	"xSpeed" : 1, 
-	"ySpeed" : 1,
-	"collisionDirectionNorth" : false,
-	"collisionDirectionSouth" : false,
-	"collisionDirectionEast" : false,
-	"collisionDirectionWest" : false
-}
-
-ctx2.fillStyle="#FF0000";
-ctx2.fillRect(monsterObj.x1, monsterObj.y1, monsterObj.width, monsterObj.height);
-
-var mobContact = false;
-var pathFound = false;
-
-var playerDirectionNorth = false;
-var playerDirectionSouth = false;
-var playerDirectionEast = false;
-var playerDirectionWest = false;
 
 // WASD keys event listener
 
@@ -120,7 +78,6 @@ document.addEventListener("keyup", function(event) {
 
 }
 )
-
 
 refreshFrame();
 

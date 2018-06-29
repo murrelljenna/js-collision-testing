@@ -144,21 +144,6 @@ function detectCollision(){
 	}
 }
 
-function collisionDetectDebug(counter){
-	if (!(masterColArray[counter].x2 <= playerObj.x1)){
-		console.log (counter + " [1]masterColArray[counter].x2 <= playerObj.x1 = false")
-	}  
-	if (!(playerObj.x2 <= masterColArray[counter].x1)){
-		console.log (counter + " [2] playerObj.x2 <= masterColArray[counter].x1 = false")
-	}
-	if (!(masterColArray[counter].y2 <= playerObj.y1)){
-		console.log (counter + " [3] masterColArray[counter].y2 <= playerObj.y1 = false")
-	}
-	if (!(playerObj.y2 <= masterColArray[counter].y1)){
-		console.log (counter + " [4] playerObj.y2 <= masterColArray[counter].y1 = false")
-	}
-}
-
 function detectCollisionSide(needleArr, haystackArr){
 	let northSignal = false
 	let southSignal = false
@@ -208,15 +193,6 @@ function detectCollisionSide(needleArr, haystackArr){
 	needleArr.collisionDirectionSouth = southSignal;
 	needleArr.collisionDirectionEast = eastSignal;
 	needleArr.collisionDirectionWest = westSignal;
-}
-
-function masterColArrayDebug(){
-	ctx.strokeStyle="#FF0000";
-	for (index in masterColArray){
-		ctx.moveTo((masterColArray[index].x1), (masterColArray[index].y1))
-		ctx.lineTo((masterColArray[index].x2), (masterColArray[index].y2))
-		ctx.stroke()
-	}
 }
 
 function updatePosition(movingEntity){
