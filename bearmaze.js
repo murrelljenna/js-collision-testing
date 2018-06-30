@@ -6,8 +6,8 @@ function refreshFrame(){
 updatePosition(playerObj);
 updatePosition(monsterObj);
 
-detectCollisionSide(playerObj, mapEntities);
-detectCollisionSide(monsterObj, mapEntities);
+detectCollisionSide(playerEntities, mapEntities);
+detectCollisionSide(monsterEntities, mapEntities);
 
 if (outsideCanvas(playerObj)){
 	drawLines()

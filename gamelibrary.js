@@ -129,70 +129,78 @@ function outsideCanvas(movingEntity){
 
 // Collision detection functions
 
-function detectCollision(){
-	for (var counter in masterColArray){
-		if (
-		masterColArray[counter].x2 < playerObj.x1 ||  
-		playerObj.x2 < masterColArray[counter].x1 ||
-		masterColArray[counter].y2 < playerObj.y1 ||
-		playerObj.y2 < masterColArray[counter].y1
-		){
-			return false
-		}else{	
-			return true
+function detectCollision(needleArr, haystackArr){
+	var collisionArr = [];	
+
+	for (var index in needleArr){
+		for (var counter in haystackArr){
+			if (
+			haystackArr[counter].x2 < needleArr[index].x1 ||  
+			needleArr[index].x2 < haystackArr[counter].x1 ||
+			haystackArr[counter].y2 < needleArr[index].y1 ||
+			needleArr[index].y2 < haystackArr[counter].y1
+			){
+				console.log("hi");
+				collisionArr.push(needleArr[index])
+				break;
+			}
 		}
 	}
+	
+	return collisionArr;
 }
 
-function detectCollisionSide(needleArr, haystackArr){
+function detectCollisionSide (needleArr, haystackArr){
 	let northSignal = false
 	let southSignal = false
 	let eastSignal = false
 	let westSignal = false
 
-	for (var counter in haystackArr){
-		if ((isInRange(needleArr.x1, haystackArr[counter].x1, haystackArr[counter].x2) &&
-		isInRange(needleArr.y1, (haystackArr[counter].y2 - 1), (haystackArr[counter].y2 + 1))) || 
-		(isInRange(haystackArr[counter].x2, needleArr.x1, needleArr.x2) &&
-		isInRange(needleArr.y1, (haystackArr[counter].y2 - 1), (haystackArr[counter].y2 + 1)))){
-			northSignal = true
-			if (needleArr.ySpeed < 0 ){
-				needleArr.ySpeed = 0
+	for (var index in needleArr){
+		for (var counter in haystackArr){
+			if ((isInRange(needleArr[index].x1, haystackArr[counter].x1, haystackArr[counter].x2) &&
+			isInRange(needleArr[index].y1, (haystackArr[counter].y2 - 1), (haystackArr[counter].y2 + 1))) || 
+			(isInRange(haystackArr[counter].x2, needleArr[index].x1, needleArr[index].x2) &&
+			isInRange(needleArr[index].y1, (haystackArr[counter].y2 - 1), (haystackArr[counter].y2 + 1)))){
+				northSignal = true
+				if (needleArr[index].ySpeed < 0 ){
+					needleArr[index].ySpeed = 0
+				}
+			}
+			if ((isInRange(needleArr[index].x2, haystackArr[counter].x1, haystackArr[counter].x2) &&
+			isInRange(needleArr[index].y2, (haystackArr[counter].y1 - 1), (haystackArr[counter].y1 + 1))) ||
+			(isInRange(haystackArr[counter].x1, needleArr[index].x1, needleArr[index].x2) &&
+			isInRange(needleArr[index].y2, (haystackArr[counter].y1 - 1), (haystackArr[counter].y1 + 1)))){
+				southSignal = true
+				if (needleArr[index].ySpeed > 0){
+					needleArr[index].ySpeed = 0
+				}
+			}
+			if ((isInRange(needleArr[index].y1, haystackArr[counter].y1, haystackArr[counter].y2) &&
+			isInRange(needleArr[index].x1, (haystackArr[counter].x2 - 1), (haystackArr[counter].x2 + 1))) ||
+			(isInRange(haystackArr[counter].y2, needleArr[index].y1, needleArr[index].y2) &&
+			isInRange(needleArr[index].x1, (haystackArr[counter].x2 - 1), (haystackArr[counter].x2 + 1)))){
+				westSignal = true
+				if (needleArr[index].xSpeed < 0){
+					needleArr[index].xSpeed = 0
+				}
+			}
+			if ((isInRange(needleArr[index].y2, haystackArr[counter].y1, haystackArr[counter].y2) &&
+			isInRange(needleArr[index].x2, (haystackArr[counter].x1 - 1), (haystackArr[counter].x1 + 1)))||
+			(isInRange(haystackArr[counter].y1, needleArr[index].y1, needleArr[index].y2) &&
+			isInRange(needleArr[index].x2, (haystackArr[counter].x1 - 1), (haystackArr[counter].x1 + 1)))){
+				eastSignal = true
+				if (needleArr[index].xSpeed > 0){
+					needleArr[index].xSpeed = 0
+				}
 			}
 		}
-		if ((isInRange(needleArr.x2, haystackArr[counter].x1, haystackArr[counter].x2) &&
-		isInRange(needleArr.y2, (haystackArr[counter].y1 - 1), (haystackArr[counter].y1 + 1))) ||
-		(isInRange(haystackArr[counter].x1, needleArr.x1, needleArr.x2) &&
-		isInRange(needleArr.y2, (haystackArr[counter].y1 - 1), (haystackArr[counter].y1 + 1)))){
-			southSignal = true
-			if (needleArr.ySpeed > 0){
-				needleArr.ySpeed = 0
-			}
-		}
-		if ((isInRange(needleArr.y1, haystackArr[counter].y1, haystackArr[counter].y2) &&
-		isInRange(needleArr.x1, (haystackArr[counter].x2 - 1), (haystackArr[counter].x2 + 1))) ||
-		(isInRange(haystackArr[counter].y2, needleArr.y1, needleArr.y2) &&
-		isInRange(needleArr.x1, (haystackArr[counter].x2 - 1), (haystackArr[counter].x2 + 1)))){
-			westSignal = true
-			if (needleArr.xSpeed < 0){
-				needleArr.xSpeed = 0
-			}
-		}
-		if ((isInRange(needleArr.y2, haystackArr[counter].y1, haystackArr[counter].y2) &&
-		isInRange(needleArr.x2, (haystackArr[counter].x1 - 1), (haystackArr[counter].x1 + 1)))||
-		(isInRange(haystackArr[counter].y1, needleArr.y1, needleArr.y2) &&
-		isInRange(needleArr.x2, (haystackArr[counter].x1 - 1), (haystackArr[counter].x1 + 1)))){
-			eastSignal = true
-			if (needleArr.xSpeed > 0){
-				needleArr.xSpeed = 0
-			}
-		}
-	}
 
-	needleArr.collisionDirectionNorth = northSignal;
-	needleArr.collisionDirectionSouth = southSignal;
-	needleArr.collisionDirectionEast = eastSignal;
-	needleArr.collisionDirectionWest = westSignal;
+		needleArr[index].collisionDirectionNorth = northSignal;
+		needleArr[index].collisionDirectionSouth = southSignal;
+		needleArr[index].collisionDirectionEast = eastSignal;
+		needleArr[index].collisionDirectionWest = westSignal;
+	}
 }
 
 function updatePosition(movingEntity){
