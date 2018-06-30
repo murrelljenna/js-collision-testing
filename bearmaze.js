@@ -12,8 +12,23 @@ if (isColliding(playerEntities, mapEntities).length > 0){
 	clearCollision(playerEntities);
 }
 
-if (outsideCanvas(playerObj)){
-	drawLines()
+if (isColliding(playerEntities, monsterEntities).length > 0){
+	for (index in isColliding(playerEntities, monsterEntities)){
+		let entRef = isColliding(playerEntities, monsterEntities)[index];
+		let x1 = entRef.x1
+		let y1 = entRef.y1
+		
+		ctx2.clearRect(x1, y1, entRef.width, entRef.height);
+		entRef.x1 = 403;
+		entRef.y1 = 403;
+		
+		entRef.lives -= 1
+		if (entRef.lives <= 0){
+			ctx.clearRect(0, 0, canvasHeight, canvasWidth);
+			ctx2.clearRect(0, 0, canvasHeight, canvasWidth);
+			ctx.fillText("Game Over", 403, 403);
+		}
+	}
 }
 
 roombaMovement(monsterObj);

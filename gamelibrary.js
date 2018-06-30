@@ -48,6 +48,7 @@ function Player (x1, y1, width, height, arr) {
 	this.collisionSouth = false
 	this.collisionEast = false
 	this.collisionWest = false
+	this.lives = 3
 	arr = arr || 0
 
 	if (arr !== 0) {
@@ -255,7 +256,9 @@ function randomLines(count, arr){
 	return arr
 }
 
-// Canvas Drawing Functions
+/*
+	Canvas Drawing Functions
+*/
 
 function drawMap(canvas, arr){
 	for (index in arr){
