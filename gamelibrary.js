@@ -129,7 +129,7 @@ function outsideCanvas(movingEntity){
 
 // Collision detection functions
 
-function detectCollision(needleArr, haystackArr){
+function isColliding (needleArr, haystackArr){
 	var collisionArr = [];	
 
 	for (var index in needleArr){
@@ -140,7 +140,8 @@ function detectCollision(needleArr, haystackArr){
 			haystackArr[counter].y2 < needleArr[index].y1 ||
 			needleArr[index].y2 < haystackArr[counter].y1
 			){
-				console.log("hi");
+				continue
+			}else{
 				collisionArr.push(needleArr[index])
 				break;
 			}
@@ -200,6 +201,15 @@ function detectCollisionSide (needleArr, haystackArr){
 		needleArr[index].collisionDirectionSouth = southSignal;
 		needleArr[index].collisionDirectionEast = eastSignal;
 		needleArr[index].collisionDirectionWest = westSignal;
+	}
+}
+
+function clearCollision(arr){
+	for (var index in arr){
+		arr[index].collisionDirectionNorth = false;
+		arr[index].collisionDirectionSouth = false;
+		arr[index].collisionDirectionEast = false;
+		arr[index].collisionDirectionWest = false;
 	}
 }
 
