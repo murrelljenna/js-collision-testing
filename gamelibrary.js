@@ -42,7 +42,7 @@ function Player (x1, y1, width, height, arr) {
 	this.y1 = y1
 	this.width = width
 	this.height = height
-	this.xSpeed = 0
+	this.xSpeed = 0 
 	this.ySpeed = 0
 	this.collisionNorth = false
 	this.collisionSouth = false
@@ -61,8 +61,8 @@ function Monster (x1, y1, width, height, arr) {
 	this.y1 = y1
 	this.width = width
 	this.height = height
-	this.xSpeed = 0
-	this.ySpeed = 0
+	this.xSpeed = pickRange(-1, 1)
+	this.ySpeed = pickRange(-1, 1)
 	this.collisionNorth = false
 	this.collisionSouth = false
 	this.collisionEast = false
@@ -83,32 +83,40 @@ function roombaMovement(movingEntity){
 		coinFlip = Math.floor(Math.random() * 2);
 		if (coinFlip === 0){
 			movingEntity.xSpeed = 2
+			movingEntity.ySpeed = 1
 		}else{
-			movingEntity.xSpeed = 2
+			movingEntity.xSpeed = -2
+			movingEntity.ySpeed = 1
 		}
 	}
 	if (movingEntity.collisionDirectionSouth === true && movingEntity.collisionDirectionWest === false && movingEntity.collisionDirectionEast === false){
 		coinFlip = Math.floor(Math.random() * 2);
 		if (coinFlip === 0){
 			movingEntity.xSpeed = 2
+			movingEntity.ySpeed = -1
 		}else{
-			movingEntity.xSpeed = 2
+			movingEntity.xSpeed = -2
+			movingEntity.ySpeed = -1
 		}
 	}
 	if (movingEntity.collisionDirectionWest === true && movingEntity.collisionDirectionNorth === false && movingEntity.collisionDirectionSouth === false){
 		coinFlip = Math.floor(Math.random() * 2);
 		if (coinFlip === 0){
 			movingEntity.ySpeed = 2
+			movingEntity.xSpeed = 2
 		}else{
-			movingEntity.ySpeed = 2
+			movingEntity.ySpeed = -2
+			movingEntity.xSpeed = 2
 		}
 	}
 	if (movingEntity.collisionDirectionEast === true && movingEntity.collisionDirectionNorth === false && movingEntity.collisionDirectionSouth === false){
 		coinFlip = Math.floor(Math.random() * 2);
 		if (coinFlip === 0){
 			movingEntity.ySpeed = 2
+			movingEntity.xSpeed = -2
 		}else{
-			movingEntity.ySpeed = 2
+			movingEntity.ySpeed = -2
+			movingEntity.xSpeed = -2
 		}	
 	}
 }
@@ -267,7 +275,7 @@ function drawMap(canvas, arr){
 		width = arr[index].width;
 		height = arr[index].height;
 
-		canvas.fillRect(x1, y1, width, height);
+		canvas.strokeRect(x1, y1, width, height);
 	} 
 }
 

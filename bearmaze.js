@@ -12,6 +12,12 @@ if (isColliding(playerEntities, mapEntities).length > 0){
 	clearCollision(playerEntities);
 }
 
+if (isColliding(monsterEntities, mapEntities).length > 0){
+	detectCollisionSide(isColliding(monsterEntities, mapEntities), mapEntities);
+}else{
+	clearCollision(monsterEntities);
+}
+
 if (isColliding(playerEntities, monsterEntities).length > 0){
 	for (index in isColliding(playerEntities, monsterEntities)){
 		let entRef = isColliding(playerEntities, monsterEntities)[index];
@@ -57,6 +63,13 @@ var monsterEntities = [];
 
 var playerObj = new Player (403, 403, 15, 15, playerEntities);
 var monsterObj = new Monster (200, 200, 25, 25, monsterEntities);
+
+var wMapBarrier = new MapEntity (0, 0, 0, canvasHeight, mapEntities);
+var eMapBarrier = new MapEntity (canvasWidth, 0, 0, canvasHeight, mapEntities);
+var nMapBarrier = new MapEntity (0, 0, canvasWidth, 0, mapEntities);
+var sMapBarrier = new MapEntity (0, canvasHeight, canvasWidth, 0, mapEntities);
+
+
 
 randomLines(14, mapEntities);
 drawMap(ctx, mapEntities)
